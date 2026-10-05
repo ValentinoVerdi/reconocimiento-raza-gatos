@@ -75,7 +75,6 @@ function App() {
         ¿Qué raza de gato es? 🐱
       </h1>
 
-      {/* Input oculto para manejar el click */}
       <input
         type="file"
         ref={fileInputRef}
@@ -84,7 +83,6 @@ function App() {
         style={{ display: "none" }}
       />
 
-      {/* Zona de Arrastre y Clic */}
       <div
         onClick={() => fileInputRef.current.click()}
         onDragOver={handleDragOver}
@@ -121,7 +119,6 @@ function App() {
           />
         ) : (
           <>
-            {/* Ícono de nube con flecha */}
             <svg
               style={{ width: "40px", height: "40px", marginBottom: "0.5rem", fill: "#64748b" }}
               viewBox="0 0 24 24"
@@ -155,13 +152,48 @@ function App() {
       </button>
 
       {resultado && (
-        <div style={{ marginTop: "2rem", textAlign: "center" }}>
+        <div style={{ marginTop: "2rem", textAlign: "center", width: "100%", maxWidth: "450px" }}>
           <p style={{ fontSize: "1.25rem", color: "#1e293b", margin: "0.5rem 0" }}>
             Resultado: <strong>{resultado.confianza > 0.5 ? resultado.raza : "desconocida"}</strong>
           </p>
-          <p style={{ fontSize: "1rem", color: "#64748b", margin: 0 }}>
+          <p style={{ fontSize: "1rem", color: "#64748b", margin: "0 0 1.5rem 0" }}>
             Confianza: {(resultado.confianza * 100).toFixed(2)}%
           </p>
+
+          {resultado.top3 && (
+            <div style={{ textAlign: "left" }}>
+              <p style={{ fontSize: "0.95rem", color: "#475569", fontWeight: "600", margin: "0 0 0.75rem 0" }}>
+                Las 3 razas más probables
+              </p>
+              {resultado.top3.map((item, i) => (
+                <div key={item.raza} style={{ marginBottom: "0.75rem" }}>
+                  <div style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    fontSize: "0.95rem",
+                    color: "#1e293b",
+                    marginBottom: "0.25rem"
+                  }}>
+                    <span style={{ fontWeight: i === 0 ? "700" : "400" }}>{item.raza}</span>
+                    <span style={{ color: "#64748b" }}>{(item.confianza * 100).toFixed(1)}%</span>
+                  </div>
+                  <div style={{
+                    height: "8px",
+                    backgroundColor: "#e2e8f0",
+                    borderRadius: "4px",
+                    overflow: "hidden"
+                  }}>
+                    <div style={{
+                      width: `${item.confianza * 100}%`,
+                      height: "100%",
+                      backgroundColor: i === 0 ? "#007bff" : "#94a3b8",
+                      transition: "width 0.4s ease"
+                    }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>

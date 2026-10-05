@@ -4,6 +4,7 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import img_to_array
 from PIL import Image
 from flask_cors import CORS
+from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 import numpy as np
 import os
 import json
@@ -24,9 +25,9 @@ else:
     clases = []
 
 def preparar_imagen(imagen):
-    imagen = imagen.resize((150, 150))
-    imagen = imagen.convert("RGB")
-    array = img_to_array(imagen) / 255.0
+    imagen = imagen.convert("RGB").resize((224, 224))
+    array = img_to_array(imagen)
+    array = preprocess_input(array)
     return np.expand_dims(array, axis=0)
 
 @app.route('/predict', methods=['POST'])
@@ -38,11 +39,13 @@ def predict():
     imagen = Image.open(archivo)
     preparada = preparar_imagen(imagen)
     preds = model.predict(preparada)[0]
-    indice = int(np.argmax(preds))
-    confianza = float(preds[indice])
-    raza = clases.get(str(indice), "desconocida")
-
-    return jsonify({'raza': raza, 'confianza': confianza})
+    top3 = np.argsort(preds)[::-1][:3]
+    indice = int(top3[0])
+    return jsonify({
+        'raza': clases.get(str(indice), "desconocida"),
+        'confianza': float(preds[indice]),
+        'top3': [{'raza': clases.get(str(int(i))), 'confianza': float(preds[i])} for i in top3]
+    })
 
 
 if __name__ == '__main__':
