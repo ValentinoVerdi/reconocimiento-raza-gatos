@@ -10,7 +10,7 @@ Este proyecto es un sistema web que detecta la raza de un gato a partir de una f
 ## Cómo usar
 1. Cloná el repositorio en `https://github.com/ValentinoVerdi/reconocimiento-raza-gatos`
 2. Instalá las dependencias:
-   - Backend: `pip install tensorflow flask flask-cors pillow numpy`
+   - Backend: `pip install tensorflow flask flask-cors pillow numpy` dentro de `backend/` 
    - Frontend: `npm install` dentro de `frontend/`
 3. Poné las imágenes en `backend/dataset/`, una carpeta por raza (`Bengal`, `Bombay`, `British`, `Russian`, `Siamese`, `Sphynx`)
 4. Corré `python3 backend/entrenar.py` desde la raíz del proyecto
