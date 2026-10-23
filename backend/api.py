@@ -1,4 +1,3 @@
-# backend/api.py
 from flask import Flask, request, jsonify
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import img_to_array
@@ -12,11 +11,11 @@ import json
 app = Flask(__name__)
 CORS(app)
 
-# Cargar modelo entrenado
+# Cargo el modelo entrenado
 model_path = 'modelo/modelo_raza_gatos.h5'
 model = load_model(model_path)
 
-# Cargar clases de razas 
+# Cargo las clases de razas
 classes_path = 'modelo/classes.json'
 if os.path.exists(classes_path):
     with open(classes_path, 'r') as f:
